@@ -3,233 +3,276 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import Anthropic from '@anthropic-ai/sdk'
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY!,
-})
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! })
 
 type Tone = 'elegant' | 'dynamic' | 'warm' | 'luxury'
 type Language = 'fr' | 'en' | 'both'
+type ContentType = 'instagram' | 'pdf' | 'email' | 'listing' | 'story' | 'video' | 'whatsapp' | 'linkedin'
 
 interface FormData {
-  propertyType: string
-  price: string
-  surface: string
-  rooms: string
-  bedrooms: string
-  city: string
-  dpe: string
-  mainFeatures: string
-  neighborhood: string
-  additionalInfo: string
-  tone: Tone
-  language: Language
+  propertyType: string; price: string; surface: string; rooms: string; bedrooms: string
+  city: string; dpe: string; floor: string; hasElevator: boolean; hasPool: boolean
+  parking: string; exposure: string; yearBuilt: string; condition: string
+  targetAudience: string; balconySize: string; mainFeatures: string
+  neighborhood: string; additionalInfo: string; tone: Tone; language: Language
 }
 
 const TONE_INSTRUCTIONS: Record<Tone, string> = {
-  elegant: `Utilise un ton raffiné, sophistiqué et distingué. Vocabulaire choisi, phrases élégantes et bien construites, style littéraire sobre. Évite les superlatifs vulgaires. Privilégie la précision et le goût.`,
-  dynamic: `Utilise un ton énergique et dynamique. Phrases courtes et percutantes, mots d'action, rythme soutenu. Crée de l'enthousiasme et de l'urgence. Style direct et vivant.`,
-  warm: `Utilise un ton chaleureux, humain et proche. Mets en avant le style de vie, les émotions, la qualité de vie. Parle de "chez soi", de "foyer", de vie quotidienne. Crée une connexion émotionnelle.`,
-  luxury: `Utilise un ton ultra-prestige et exclusif. Vocabulaire du luxe (exceptionnel, rare, unique, d'exception, raffiné, exclusif). Cible une clientèle haut de gamme. Chaque mot doit inspirer excellence et distinction.`,
+  elegant: 'Ton raffiné, sophistiqué, vocabulaire choisi. Phrases élégantes, style littéraire sobre. Précision et bon goût.',
+  dynamic: 'Ton énergique. Phrases courtes et percutantes, mots d\'action, rythme soutenu. Enthousiasme et urgence.',
+  warm: 'Ton chaleureux et humain. Met en avant le style de vie, les émotions, la qualité de vie au quotidien.',
+  luxury: 'Ton ultra-prestige. Vocabulaire exclusif (exceptionnel, rare, d\'exception). Clientèle HNWI.',
 }
 
-function buildPropertyContext(form: FormData): string {
-  const parts = [
-    `Type de bien : ${form.propertyType}`,
-    form.surface ? `Surface : ${form.surface} m²` : '',
-    form.price ? `Prix : ${form.price} €` : '',
-    form.rooms ? `Pièces : ${form.rooms}` : '',
-    form.bedrooms ? `Chambres : ${form.bedrooms}` : '',
-    form.city ? `Localisation : ${form.city}` : '',
-    form.dpe && form.dpe !== 'Non spécifié' ? `DPE : ${form.dpe}` : '',
-    `Atouts principaux : ${form.mainFeatures}`,
-    form.neighborhood ? `Environnement / Quartier : ${form.neighborhood}` : '',
-    form.additionalInfo ? `Informations supplémentaires : ${form.additionalInfo}` : '',
-  ].filter(Boolean)
-
-  return parts.join('\n')
+function buildContext(form: FormData): string {
+  return [
+    `Type : ${form.propertyType}`,
+    form.surface && `Surface : ${form.surface} m²`,
+    form.price && `Prix : ${form.price} €`,
+    form.rooms && `Pièces : ${form.rooms}`,
+    form.bedrooms && `Chambres : ${form.bedrooms}`,
+    form.floor && `Étage : ${form.floor}`,
+    form.balconySize && `Balcon/Terrasse : ${form.balconySize} m²`,
+    form.parking !== 'Non spécifié' && `Parking : ${form.parking}`,
+    form.exposure !== 'Non spécifié' && `Exposition : ${form.exposure}`,
+    form.hasElevator && `Ascenseur : Oui`,
+    form.hasPool && `Piscine : Oui`,
+    form.dpe !== 'Non spécifié' && `DPE : ${form.dpe}`,
+    form.yearBuilt && `Année de construction : ${form.yearBuilt}`,
+    `État : ${form.condition}`,
+    form.targetAudience !== 'Non spécifié' && `Public cible : ${form.targetAudience}`,
+    form.city && `Localisation : ${form.city}`,
+    `Atouts : ${form.mainFeatures}`,
+    form.neighborhood && `Quartier : ${form.neighborhood}`,
+    form.additionalInfo && `Infos supplémentaires : ${form.additionalInfo}`,
+  ].filter(Boolean).join('\n')
 }
 
-function buildLanguageInstruction(language: Language): string {
+function langInstruction(language: Language): string {
   if (language === 'fr') return 'Rédige uniquement en français.'
   if (language === 'en') return 'Write only in English.'
-  return 'Rédige en français ET en anglais (traduis la totalité du contenu dans les deux langues, section française d\'abord, puis section anglaise).'
+  return 'Rédige en français ET en anglais (section FR d\'abord, puis section EN).'
 }
 
-async function generateContent(
-  type: 'instagram' | 'pdf' | 'email' | 'listing',
-  form: FormData
-): Promise<string> {
-  const context = buildPropertyContext(form)
-  const toneInstruction = TONE_INSTRUCTIONS[form.tone]
-  const langInstruction = buildLanguageInstruction(form.language)
+type MessageParam = Anthropic.Messages.MessageParam
 
-  let prompt = ''
-
-  if (type === 'instagram') {
-    prompt = `Tu es un expert en marketing immobilier. Rédige un post Instagram professionnel et engageant pour ce bien.
-
-BIEN :
-${context}
-
-INSTRUCTIONS DE TON : ${toneInstruction}
-LANGUE : ${langInstruction}
-
-Le post doit inclure :
-1. Une accroche percutante en 1-2 lignes (avec emojis)
-2. Une description du bien en 3-4 lignes valorisante
-3. Les points forts mis en avant avec des emojis (format bullet)
-4. La localisation et le type de bien
-5. Un CTA clair (appel à l'action)
-6. 15 à 20 hashtags pertinents en fin de post (#immobilier #realestate #luxe etc.)
-
-Maximum 280 mots. Sois naturel, accrocheur et professionnel.`
+function buildMessages(prompt: string, photoUrls: string[]): MessageParam[] {
+  if (photoUrls.length === 0) {
+    return [{ role: 'user', content: prompt }]
   }
 
-  if (type === 'pdf') {
-    prompt = `Tu es un agent immobilier expert. Rédige une fiche de présentation complète et professionnelle pour ce bien.
+  const imageBlocks: Anthropic.Messages.ImageBlockParam[] = photoUrls.map(url => ({
+    type: 'image',
+    source: { type: 'url', url },
+  }))
+
+  return [{
+    role: 'user',
+    content: [
+      ...imageBlocks,
+      { type: 'text', text: `${prompt}\n\nAnalyse également les photos fournies pour enrichir le contenu avec des détails visuels précis (matériaux, luminosité, volumes, finitions, ambiance…).` },
+    ],
+  }]
+}
+
+async function generateContent(type: ContentType, form: FormData, photoUrls: string[]): Promise<string> {
+  const ctx = buildContext(form)
+  const tone = TONE_INSTRUCTIONS[form.tone]
+  const lang = langInstruction(form.language)
+
+  const prompts: Record<ContentType, string> = {
+    instagram: `Tu es expert en marketing immobilier. Rédige un post Instagram professionnel et engageant.
 
 BIEN :
-${context}
+${ctx}
 
-INSTRUCTIONS DE TON : ${toneInstruction}
-LANGUE : ${langInstruction}
+TON : ${tone}
+${lang}
 
-La fiche doit inclure :
-1. TITRE : Un titre accrocheur et descriptif (max 80 caractères)
-2. DESCRIPTION : Un texte de présentation principal de 150 à 200 mots, valorisant le bien
-3. POINTS FORTS : Une liste de 5 à 7 atouts majeurs, présentés clairement
-4. LE QUARTIER : 2-3 lignes sur l'environnement et la situation géographique
-5. CARACTÉRISTIQUES TECHNIQUES : Surface, pièces, chambres, DPE, prix (si disponibles)
+Structure :
+1. Accroche percutante 1-2 lignes avec emojis
+2. Description valorisante 3-4 lignes
+3. Points forts avec emojis (format bullet)
+4. Localisation et type de bien
+5. CTA clair (ex: "DM pour visiter 📩")
+6. 15-20 hashtags pertinents
 
-Adopte un style clair, structuré et professionnel. Chaque section doit être clairement séparée.`
-  }
+Max 280 mots.`,
 
-  if (type === 'email') {
-    prompt = `Tu es un agent immobilier professionnel. Rédige un email de présentation complet pour ce bien immobilier.
-
-BIEN :
-${context}
-
-INSTRUCTIONS DE TON : ${toneInstruction}
-LANGUE : ${langInstruction}
-
-L'email doit inclure :
-1. OBJET : Une ligne d'objet percutante et professionnelle (commence par "Objet : ")
-2. CORPS :
-   - Accroche personnalisée (2-3 lignes)
-   - Présentation détaillée du bien (150 mots)
-   - Mise en avant des points forts
-   - Description du quartier
-   - Invitation claire à visiter le bien
-3. FORMULE DE POLITESSE : Professionnelle et chaleureuse
-4. SIGNATURE : Bloc de signature type agent immobilier
-
-Structure l'email avec des sauts de ligne clairs. Ton professionnel, chaleureux et convaincant.`
-  }
-
-  if (type === 'listing') {
-    prompt = `Tu es un spécialiste du marketing immobilier digital. Rédige une annonce optimisée pour les portails immobiliers (SeLoger, LeBonCoin, PAP, etc.).
+    pdf: `Tu es agent immobilier expert. Rédige une fiche de présentation professionnelle.
 
 BIEN :
-${context}
+${ctx}
 
-INSTRUCTIONS DE TON : ${toneInstruction}
-LANGUE : ${langInstruction}
+TON : ${tone}
+${lang}
 
-L'annonce doit inclure :
-1. TITRE : Maximum 80 caractères, accrocheur, informatif, avec les infos clés (type, surface, ville)
-2. DESCRIPTION : 200 à 250 mots exactement
-   - Première phrase : accroche forte qui donne envie de lire
-   - Corps : description complète et valorisante du bien
-   - Mots-clés pertinents intégrés naturellement pour le référencement
-   - Points forts mis en avant progressivement
-   - Environnement et quartier
-   - Conclusion avec invitation à visiter
+Structure :
+1. TITRE : Accrocheur, max 80 caractères
+2. DESCRIPTION : 150-200 mots valorisant le bien
+3. POINTS FORTS : 5-7 atouts en liste
+4. LE QUARTIER : 2-3 lignes sur l'environnement
+5. CARACTÉRISTIQUES : Surface, pièces, chambres, DPE, prix`,
 
-Optimise pour les portails immobiliers : sois précis, complet et convaincant. Évite les répétitions.`
+    email: `Tu es agent immobilier professionnel. Rédige un email de présentation complet.
+
+BIEN :
+${ctx}
+
+TON : ${tone}
+${lang}
+
+Structure :
+1. OBJET : Ligne d'objet percutante (précise "Objet : ")
+2. Accroche personnalisée (2-3 lignes)
+3. Présentation détaillée (150 mots)
+4. Points forts en avant
+5. Description du quartier
+6. Invitation à visiter
+7. Formule de politesse + signature type`,
+
+    listing: `Tu es spécialiste marketing immobilier digital. Rédige une annonce optimisée portails (SeLoger, LeBonCoin, PAP).
+
+BIEN :
+${ctx}
+
+TON : ${tone}
+${lang}
+
+Structure :
+1. TITRE : Max 80 caractères, accrocheur, informatif
+2. DESCRIPTION : Exactement 220-250 mots
+   - Première phrase accroche forte
+   - Description complète et valorisante
+   - Mots-clés SEO intégrés naturellement
+   - Points forts progressifs
+   - Quartier et environnement
+   - Conclusion avec invitation à visiter`,
+
+    story: `Tu es expert Instagram. Crée un contenu Story en 3 slides courts et percutants.
+
+BIEN :
+${ctx}
+
+TON : ${tone}
+${lang}
+
+Format strict :
+SLIDE 1 — Accroche (1 phrase choc + emoji, max 8 mots)
+SLIDE 2 — Points clés (3 bullets ultra-courts avec emojis)
+SLIDE 3 — CTA (1 phrase + emoji d'action)
+
+Style vertical, très lisible, adapté au format story 9:16.`,
+
+    video: `Tu es réalisateur de visites virtuelles immobilières. Rédige un script vidéo de présentation.
+
+BIEN :
+${ctx}
+
+TON : ${tone}
+${lang}
+
+Structure :
+INTRO (0-10s) : Accroche en voix off + présentation du bien
+VISITE (10-60s) : Narration pièce par pièce (salon, cuisine, chambres, extérieur)
+POINTS FORTS (60-75s) : Mise en avant des 3 atouts principaux
+QUARTIER (75-85s) : Environnement et accès
+OUTRO (85-90s) : CTA et contact
+
+Format : [TIMING] : texte à lire
+Durée totale : ~90 secondes`,
+
+    whatsapp: `Tu es agent immobilier. Rédige un message WhatsApp efficace pour ton fichier acheteurs.
+
+BIEN :
+${ctx}
+
+TON : ${tone}
+${lang}
+
+Format :
+- Max 160 mots
+- Ton direct et personnel
+- Emojis discrets et professionnels
+- Mentions clés (type, surface, prix, ville)
+- 2-3 atouts majeurs
+- CTA simple ("Disponible pour visiter 📅")
+- Signature courte`,
+
+    linkedin: `Tu es expert en communication immobilière B2B. Rédige un post LinkedIn professionnel.
+
+BIEN :
+${ctx}
+
+TON : ${tone}
+${lang}
+
+Structure :
+- Accroche qui interpelle (investisseurs / professionnels)
+- Présentation du bien avec données chiffrées
+- Argumentaire investissement ou professionnel
+- Points forts objectifs
+- Call-to-action professionnel
+- 3-5 hashtags LinkedIn (#immobilier #investissement #realestate)
+Max 200 mots.`,
   }
 
+  const messages = buildMessages(prompts[type], photoUrls)
   const message = await anthropic.messages.create({
     model: 'claude-opus-4-6',
-    max_tokens: 900,
-    messages: [{ role: 'user', content: prompt }],
+    max_tokens: 1000,
+    messages,
   })
 
   const content = message.content[0]
-  if (content.type === 'text') return content.text.trim()
-  return ''
+  return content.type === 'text' ? content.text.trim() : ''
 }
 
 export async function POST(req: NextRequest) {
   try {
-    // 1. Authenticate via Supabase
     const cookieStore = await cookies()
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
         cookies: {
-          getAll() {
-            return cookieStore.getAll()
-          },
+          getAll() { return cookieStore.getAll() },
           setAll(cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
-            cookiesToSet.forEach(({ name, value, options }) => {
+            cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options as Parameters<typeof cookieStore.set>[2])
-            })
+            )
           },
         },
       }
     )
 
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      return NextResponse.json({ error: 'Non authentifié. Veuillez vous connecter.' }, { status: 401 })
-    }
+    if (!user) return NextResponse.json({ error: 'Non authentifié.' }, { status: 401 })
 
-    // 2. Check credits
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('credits, kits_generated')
-      .eq('id', user.id)
-      .single()
+    const { data: profile } = await supabase
+      .from('profiles').select('credits, kits_generated').eq('id', user.id).single()
 
-    if (profileError || !profile) {
-      return NextResponse.json({ error: 'Profil introuvable.' }, { status: 404 })
-    }
+    if (!profile) return NextResponse.json({ error: 'Profil introuvable.' }, { status: 404 })
+    if (profile.credits < 1) return NextResponse.json({ error: 'Crédits insuffisants.' }, { status: 402 })
 
-    if (profile.credits < 1) {
-      return NextResponse.json(
-        { error: 'Crédits insuffisants. Mettez à niveau votre plan pour continuer.' },
-        { status: 402 }
-      )
-    }
-
-    // 3. Parse request body
     const body = await req.json()
-    const { formData, selectedContents } = body as {
+    const { formData, selectedContents, photoUrls = [] } = body as {
       formData: FormData
-      selectedContents: Array<'instagram' | 'pdf' | 'email' | 'listing'>
+      selectedContents: ContentType[]
+      photoUrls?: string[]
     }
 
-    if (!formData || !selectedContents || selectedContents.length === 0) {
-      return NextResponse.json({ error: 'Données manquantes.' }, { status: 400 })
-    }
+    if (!formData?.mainFeatures?.trim()) return NextResponse.json({ error: 'Les atouts principaux sont obligatoires.' }, { status: 400 })
+    if (!selectedContents?.length) return NextResponse.json({ error: 'Sélectionnez au moins un contenu.' }, { status: 400 })
 
-    if (!formData.mainFeatures?.trim()) {
-      return NextResponse.json({ error: 'Les atouts principaux sont obligatoires.' }, { status: 400 })
-    }
+    // Generate all content types in parallel
+    const results = await Promise.all(
+      selectedContents.map(async type => [type, await generateContent(type, formData, photoUrls)] as const)
+    )
+    const contents = Object.fromEntries(results)
 
-    // 4. Generate content for each selected type (in parallel)
-    const generationPromises = selectedContents.map(async (type) => {
-      const text = await generateContent(type, formData)
-      return [type, text] as const
-    })
-
-    const results = await Promise.all(generationPromises)
-    const contents: Record<string, string> = Object.fromEntries(results)
-
-    // 5. Save kit to database
-    const { error: kitError } = await supabase.from('kits').insert({
+    // Save kit
+    await supabase.from('kits').insert({
       user_id: user.id,
       property_type: formData.propertyType,
       city: formData.city,
@@ -238,28 +281,19 @@ export async function POST(req: NextRequest) {
       tone: formData.tone,
       language: formData.language,
       contents,
+      has_photos: photoUrls.length > 0,
       created_at: new Date().toISOString(),
     })
 
-    if (kitError) {
-      console.error('Error saving kit:', kitError)
-    }
-
-    // 6. Deduct 1 credit and increment kits_generated
-    await supabase
-      .from('profiles')
-      .update({
-        credits: profile.credits - 1,
-        kits_generated: (profile.kits_generated ?? 0) + 1,
-      })
-      .eq('id', user.id)
+    // Deduct credit
+    await supabase.from('profiles').update({
+      credits: profile.credits - 1,
+      kits_generated: (profile.kits_generated ?? 0) + 1,
+    }).eq('id', user.id)
 
     return NextResponse.json({ contents })
   } catch (error) {
     console.error('Generation error:', error)
-    return NextResponse.json(
-      { error: 'Erreur lors de la génération. Veuillez réessayer.' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erreur lors de la génération. Réessayez.' }, { status: 500 })
   }
 }
