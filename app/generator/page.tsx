@@ -490,7 +490,7 @@ export default function GeneratorPage() {
                     <>
                       <div style={{ fontSize: 28, marginBottom: 8 }}>📁</div>
                       <p style={{ fontSize: 14, fontWeight: 500, color: 'var(--ink-mid)', marginBottom: 4 }}>Importer des photos</p>
-                      <p style={{ fontSize: 12, color: 'var(--ink-light)' }}>Jusqu'à 5 photos · JPG, PNG, WEBP · Claude analysera chaque pièce</p>
+                      <p style={{ fontSize: 12, color: 'var(--ink-light)' }}>Jusqu'à 5 photos · JPG, PNG, WEBP · L'IA analysera chaque pièce</p>
                     </>
                   ) : (
                     <>

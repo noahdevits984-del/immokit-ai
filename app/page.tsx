@@ -20,7 +20,7 @@ export default function LandingPage() {
     { value: '30s', label: 'Temps moyen de génération' },
     { value: '4', label: 'Types de contenus par kit' },
     { value: '8', label: 'Formats de contenu disponibles' },
-    { value: '100%', label: 'Propulsé par Claude AI' },
+    { value: '100%', label: 'Propulsé par l\'IA' },
   ]
 
   const features = [
@@ -104,7 +104,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 28px', textAlign: 'center', position: 'relative' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 14px', background: 'rgba(201,169,110,0.15)', border: '1px solid rgba(201,169,110,0.3)', borderRadius: 99, marginBottom: 28 }}>
             <span style={{ width: 6, height: 6, background: 'var(--gold)', borderRadius: '50%', display: 'inline-block' }} />
-            <span style={{ fontSize: 12, color: 'var(--gold)', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Propulsé par Claude d'Anthropic</span>
+            <span style={{ fontSize: 12, color: 'var(--gold)', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Propulsé par l'Intelligence Artificielle</span>
           </div>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.4rem, 6vw, 4.2rem)', fontWeight: 500, color: 'var(--white)', lineHeight: 1.1, marginBottom: 20 }}>
             Vos contenus immobiliers,<br />
@@ -153,7 +153,7 @@ export default function LandingPage() {
               <em style={{ color: 'var(--gold)' }}>et enrichit vos contenus</em>
             </h2>
             <p style={{ fontSize: 15, color: 'var(--ink-light)', lineHeight: 1.8, marginBottom: 24 }}>
-              Importez jusqu'à 5 photos du bien. Claude identifie automatiquement les éléments visuels — parquet ancien, luminosité, volumes, finitions — et les intègre dans vos contenus avec une précision inégalée.
+              Importez jusqu'à 5 photos du bien. Notre IA identifie automatiquement les éléments visuels — parquet ancien, luminosité, volumes, finitions — et les intègre dans vos contenus avec une précision inégalée.
             </p>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
               {['Détection automatique des matériaux et finitions', 'Analyse de la luminosité et des volumes', 'Identification des atouts visuels cachés', 'Contenus enrichis sans effort supplémentaire'].map(item => (

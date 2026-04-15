@@ -134,7 +134,7 @@ export default function AuthPage() {
                 <em style={{ color: 'var(--gold)' }}>en quelques secondes.</em>"
               </p>
               <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, lineHeight: 1.7 }}>
-                Générez des posts Instagram, fiches PDF, emails et annonces optimisées pour chaque bien — propulsé par Claude d'Anthropic.
+                Générez des posts Instagram, fiches PDF, emails et annonces optimisées pour chaque bien — en quelques secondes.
               </p>
             </div>
 
