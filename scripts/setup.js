@@ -283,27 +283,60 @@ async function setupVercel(stripeVars) {
 
   const vercelToken   = await ask('Token Vercel')
   const projectName   = await ask('Nom du projet Vercel', 'immokit-ai')
+  print()
+  print(`  ${C.dim}Si votre projet est dans une équipe Vercel, entrez son slug (ex: mon-agence).${C.reset}`)
+  print(`  ${C.dim}Pour un compte personnel, appuyez simplement sur Entrée.${C.reset}`)
+  const teamSlug      = await ask('Slug de l\'équipe Vercel (Entrée si compte personnel)', '')
   const resendKey     = await ask('RESEND_API_KEY (Entrée pour passer)', '')
+
+  // ── Construire le query string équipe ─────────────────────────────────────────
+  const teamQuery = teamSlug ? `?teamId=${encodeURIComponent(teamSlug)}&slug=${encodeURIComponent(teamSlug)}` : ''
+  const vercelHeaders = { Authorization: `Bearer ${vercelToken}` }
 
   // ── Trouver le projet ────────────────────────────────────────────────────────
   print()
   info(`Recherche du projet "${projectName}"...`)
-  const rproj = await request(`https://api.vercel.com/v9/projects/${projectName}`, {
-    headers: { Authorization: `Bearer ${vercelToken}` },
+
+  // Essayer d'abord avec le nom, puis lister tous les projets en cas d'échec
+  let projectId = null
+
+  const rproj = await request(`https://api.vercel.com/v9/projects/${encodeURIComponent(projectName)}${teamQuery}`, {
+    headers: vercelHeaders,
   })
 
-  if (rproj.status !== 200) {
-    fail(`Projet "${projectName}" introuvable (${rproj.status})`)
-    fail(`Vérifiez le nom exact dans votre dashboard Vercel`)
-    process.exit(1)
+  if (rproj.status === 200) {
+    projectId = rproj.body.id
+    ok(`Projet trouvé : ${C.dim}${projectId}${C.reset}`)
+  } else {
+    // Lister tous les projets pour aider l'utilisateur
+    warn(`Accès direct échoué (${rproj.status}). Récupération de la liste des projets...`)
+    const rlist = await request(`https://api.vercel.com/v9/projects${teamQuery ? teamQuery : '?'}${teamQuery ? '&' : ''}limit=100`, {
+      headers: vercelHeaders,
+    })
+
+    if (rlist.status === 200 && Array.isArray(rlist.body.projects)) {
+      const names = rlist.body.projects.map(p => `${p.name} (${p.id})`).join('\n    ')
+      print()
+      print(`  Projets disponibles :`)
+      print(`    ${names}`)
+      print()
+      const chosen = await ask('Entrez l\'ID exact du projet (ex: prj_xxxx)')
+      if (!chosen) { fail('Aucun projet sélectionné.'); process.exit(1) }
+      projectId = chosen.trim()
+      ok(`Projet sélectionné : ${C.dim}${projectId}${C.reset}`)
+    } else {
+      fail(`Impossible d'accéder à Vercel (${rproj.status}).`)
+      fail(`Vérifiez que votre token a le scope "Full Account" (pas "Specific Project").`)
+      if (rproj.status === 403) {
+        fail(`Token créé sur vercel.com/account/tokens — choisissez "Full Account" comme scope.`)
+      }
+      process.exit(1)
+    }
   }
 
-  const projectId = rproj.body.id
-  ok(`Projet trouvé : ${C.dim}${projectId}${C.reset}`)
-
   // ── Récupérer les vars existantes ─────────────────────────────────────────────
-  const renvs = await request(`https://api.vercel.com/v10/projects/${projectId}/env`, {
-    headers: { Authorization: `Bearer ${vercelToken}` },
+  const renvs = await request(`https://api.vercel.com/v10/projects/${projectId}/env${teamQuery}`, {
+    headers: vercelHeaders,
   })
   const existing = {}
   if (renvs.status === 200 && Array.isArray(renvs.body.envs)) {
@@ -313,7 +346,6 @@ async function setupVercel(stripeVars) {
   // ── Variables à injecter ───────────────────────────────────────────────────
   const vars = { ...stripeVars }
   if (resendKey) vars['RESEND_API_KEY'] = resendKey
-  // Supprimer les clés vides
   for (const k of Object.keys(vars)) { if (!vars[k]) delete vars[k] }
 
   print()
@@ -321,25 +353,17 @@ async function setupVercel(stripeVars) {
 
   for (const [key, value] of Object.entries(vars)) {
     if (key in existing) {
-      // Mettre à jour la variable existante
-      const r = await request(`https://api.vercel.com/v10/projects/${projectId}/env/${existing[key]}`, {
+      const r = await request(`https://api.vercel.com/v10/projects/${projectId}/env/${existing[key]}${teamQuery}`, {
         method: 'PATCH',
-        headers: {
-          Authorization:   `Bearer ${vercelToken}`,
-          'Content-Type':  'application/json',
-        },
+        headers: { ...vercelHeaders, 'Content-Type': 'application/json' },
         body: JSON.stringify({ value, target: ['production', 'preview'] }),
       })
       if (r.status === 200 || r.status === 201) ok(`${key} mis à jour`)
       else fail(`${key} : ${r.body?.error?.message || r.status}`)
     } else {
-      // Créer la variable
-      const r = await request(`https://api.vercel.com/v10/projects/${projectId}/env`, {
+      const r = await request(`https://api.vercel.com/v10/projects/${projectId}/env${teamQuery}`, {
         method: 'POST',
-        headers: {
-          Authorization:   `Bearer ${vercelToken}`,
-          'Content-Type':  'application/json',
-        },
+        headers: { ...vercelHeaders, 'Content-Type': 'application/json' },
         body: JSON.stringify({ key, value, type: 'encrypted', target: ['production', 'preview'] }),
       })
       if (r.status === 200 || r.status === 201) ok(`${key} ajouté`)
