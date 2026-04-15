@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   email         TEXT,
   full_name     TEXT,
   agency        TEXT,
-  credits       INTEGER NOT NULL DEFAULT 10,
+  credits       INTEGER NOT NULL DEFAULT 3,
   plan          TEXT NOT NULL DEFAULT 'free',
   kits_generated INTEGER NOT NULL DEFAULT 0,
   created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -80,7 +80,7 @@ BEGIN
     NEW.email,
     COALESCE(NEW.raw_user_meta_data->>'full_name', ''),
     COALESCE(NEW.raw_user_meta_data->>'agency', ''),
-    10,
+    3,
     'free',
     0,
     NOW()

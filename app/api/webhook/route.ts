@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
     if (userId) {
       await supabase.from('profiles').update({
         plan: 'free',
-        credits: 10,
+        credits: 3,
         stripe_subscription_id: null,
       }).eq('id', userId)
     }

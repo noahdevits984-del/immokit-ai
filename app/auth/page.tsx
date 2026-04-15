@@ -97,7 +97,7 @@ export default function AuthPage() {
         email: signupEmail.trim(),
         full_name: signupName.trim(),
         agency: signupAgency.trim(),
-        credits: 10,
+        credits: 3,
         plan: 'free',
         kits_generated: 0,
         created_at: new Date().toISOString(),
@@ -105,7 +105,7 @@ export default function AuthPage() {
     }
 
     setSuccess(
-      'Compte créé avec succès ! Vérifiez votre email pour confirmer votre compte. Vous avez reçu 10 crédits offerts ✦'
+      'Compte créé avec succès ! Vérifiez votre email pour confirmer votre compte. Vous avez 3 kits offerts pour tester ImmoKit AI ✦'
     )
     setLoading(false)
   }
@@ -155,7 +155,7 @@ export default function AuthPage() {
 
           <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 20 }}>
             <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-              10 crédits offerts à l'inscription
+              3 kits offerts à l'inscription
             </p>
           </div>
         </div>
@@ -275,7 +275,7 @@ export default function AuthPage() {
                 <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.2rem', fontWeight: 500, color: 'var(--ink)', marginBottom: 4 }}>
                   Créez votre compte
                 </h2>
-                <p style={{ fontSize: 13, color: 'var(--ink-light)' }}>10 crédits offerts à l'inscription</p>
+                <p style={{ fontSize: 13, color: 'var(--ink-light)' }}>3 kits offerts à l'inscription</p>
               </div>
 
               <div className="form-row" style={{ marginBottom: 0 }}>

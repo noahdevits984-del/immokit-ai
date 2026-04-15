@@ -73,7 +73,7 @@ BEGIN
     NEW.id, NEW.email,
     COALESCE(NEW.raw_user_meta_data->>'full_name', ''),
     COALESCE(NEW.raw_user_meta_data->>'agency', ''),
-    10, 'free', 0, ref_code, NOW()
+    3, 'free', 0, ref_code, NOW()
   )
   ON CONFLICT (id) DO NOTHING;
 

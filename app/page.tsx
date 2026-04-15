@@ -117,7 +117,7 @@ export default function LandingPage() {
             <a href="/auth" className="btn btn-gold btn-lg">
               ✦ Commencer gratuitement →
             </a>
-            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>10 crédits offerts · Sans carte bancaire</span>
+            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>3 kits offerts · Sans carte bancaire</span>
           </div>
         </div>
 
@@ -251,7 +251,7 @@ export default function LandingPage() {
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.6rem', fontWeight: 500, marginBottom: 10 }}>
               Transparent et sans surprise.
             </h2>
-            <p style={{ fontSize: 15, color: 'var(--ink-light)' }}>Commencez gratuitement avec 10 crédits. Passez à un plan payant quand vous êtes prêt.</p>
+            <p style={{ fontSize: 15, color: 'var(--ink-light)' }}>Commencez gratuitement avec 3 kits offerts. Passez à un plan payant quand vous êtes prêt.</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, alignItems: 'start' }}>
             {plans.map(plan => (
@@ -305,7 +305,7 @@ export default function LandingPage() {
           <em style={{ color: 'var(--gold)' }}>la différence avec l'IA.</em>
         </h2>
         <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.5)', marginBottom: 36 }}>
-          10 crédits offerts. Sans carte bancaire. Prêt en 2 minutes.
+          3 kits offerts. Sans carte bancaire. Prêt en 2 minutes.
         </p>
         <a href="/auth" className="btn btn-gold btn-lg">
           ✦ Créer mon compte gratuitement →
