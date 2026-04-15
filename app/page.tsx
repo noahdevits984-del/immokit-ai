@@ -18,7 +18,7 @@ export default function LandingPage() {
 
   const stats = [
     { value: '30s', label: 'Temps moyen de génération' },
-    { value: '4', label: 'Types de contenus par kit' },
+    { value: '8', label: 'Types de contenus par kit' },
     { value: '8', label: 'Formats de contenu disponibles' },
     { value: '100%', label: 'Propulsé par l\'IA' },
   ]
