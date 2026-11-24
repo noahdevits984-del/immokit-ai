@@ -1,0 +1,909 @@
+{
+ "poles": {
+  "dir": {
+   "nom": "Direction",
+   "couleur": "#f5c542",
+   "chef": "gaspard",
+   "mission": "Fixe les priorités de la semaine, répartit chaque mission au bon pôle, fait la veille et garde la mémoire."
+  },
+  "gw": {
+   "nom": "Ghostwriting LinkedIn",
+   "couleur": "#4f9dff",
+   "chef": "lucie",
+   "mission": "Écrit les posts LinkedIn des clients, de l'interview à la mesure des résultats, et trouve les clients suivants."
+  },
+  "pf": {
+   "nom": "PapierFacile",
+   "couleur": "#3ecf8e",
+   "chef": "camille",
+   "mission": "Assistant IA qui guide les Belges dans leurs démarches administratives."
+  },
+  "tr": {
+   "nom": "Trading",
+   "couleur": "#ff7a59",
+   "chef": "victor",
+   "mission": "Conçoit, teste et surveille des robots avec un risque cadré. Aucun gain n'est promis : tout signal reste un test à blanc tant qu'il n'a pas de preuve hors échantillon, après coûts."
+  },
+  "lg": {
+   "nom": "Tournée & logistique",
+   "couleur": "#b57cff",
+   "chef": "marc",
+   "mission": "Organise la tournée de journaux : ordre des arrêts, horaires et coûts."
+  },
+  "gr": {
+   "nom": "Growth & contenu",
+   "couleur": "#ff5fa2",
+   "chef": "eloise",
+   "mission": "Fait connaître les projets : vidéos, articles pour Google, réseaux et automatisations."
+  },
+  "fa": {
+   "nom": "Finance & admin",
+   "couleur": "#5fd4d9",
+   "chef": "olivier",
+   "mission": "Gère devis, factures, mentions légales et protection des données."
+  },
+  "ts": {
+   "nom": "TikTok Shop",
+   "couleur": "#ffb347",
+   "chef": "sacha",
+   "mission": "Repère les produits qui se vendent, puis prépare chaque nuit un lot de vidéos d'affiliation : angles, accroches, scripts, fiches de publication."
+  }
+ },
+ "agents": [
+  {
+   "id": "gaspard",
+   "pole": "dir",
+   "prenom": "Gaspard",
+   "poste": "CEO",
+   "specialite": "Répartit les missions et arbitre entre les projets",
+   "competences": [
+    "Priorisation",
+    "Arbitrage temps et budget",
+    "Vision produit"
+   ],
+   "outils": [
+    "Claude",
+    "Notion",
+    "Slack"
+   ],
+   "tache": "Trie les missions du jour et choisit le pôle"
+  },
+  {
+   "id": "clara",
+   "pole": "dir",
+   "prenom": "Clara",
+   "poste": "Directrice marketing (CMO)",
+   "specialite": "Marque, positionnement et message commun aux projets",
+   "competences": [
+    "Positionnement",
+    "Message de marque",
+    "Plan de contenu"
+   ],
+   "outils": [
+    "Notion",
+    "Canva"
+   ],
+   "tache": "Aligne le message des projets"
+  },
+  {
+   "id": "theo",
+   "pole": "dir",
+   "prenom": "Théo",
+   "poste": "Directeur technique (CTO)",
+   "specialite": "Choix techniques et architecture des produits",
+   "competences": [
+    "Architecture web",
+    "Sécurité",
+    "Choix de stack"
+   ],
+   "outils": [
+    "Claude",
+    "Vercel",
+    "Supabase"
+   ],
+   "tache": "Relit l'architecture de PapierFacile"
+  },
+  {
+   "id": "nora",
+   "pole": "dir",
+   "prenom": "Nora",
+   "poste": "Cheffe de projet",
+   "specialite": "Planning, jalons et suivi des tâches entre pôles",
+   "competences": [
+    "Planification",
+    "Suivi des jalons",
+    "Rituels hebdomadaires"
+   ],
+   "outils": [
+    "Notion",
+    "Sheets"
+   ],
+   "tache": "Met à jour le planning de la semaine"
+  },
+  {
+   "id": "vera",
+   "pole": "dir",
+   "prenom": "Véra",
+   "poste": "Veille et recherche",
+   "specialite": "Recherche les faits à jour avant que les autres écrivent, cite ses sources",
+   "competences": [
+    "Recherche web",
+    "Sources fiables",
+    "Synthèse"
+   ],
+   "outils": [
+    "Firecrawl",
+    "Parallel"
+   ],
+   "tache": "Cherche des sources à jour sur un sujet"
+  },
+  {
+   "id": "quentin",
+   "pole": "dir",
+   "prenom": "Quentin",
+   "poste": "Contrôle qualité",
+   "specialite": "Relit chaque chaîne : chiffres inventés, promesses, oublis, et dit ce qui reste à valider",
+   "competences": [
+    "Relecture critique",
+    "Vérification des chiffres",
+    "Liste de validation"
+   ],
+   "outils": [
+    "Claude",
+    "Docs"
+   ],
+   "tache": "Relit le travail de la dernière chaîne"
+  },
+  {
+   "id": "alba",
+   "pole": "dir",
+   "prenom": "Alba",
+   "poste": "Archiviste et mémoire",
+   "specialite": "Résume chaque mission en trois lignes et la range au bon pôle",
+   "competences": [
+    "Résumés",
+    "Classement",
+    "Mémoire du QG"
+   ],
+   "outils": [
+    "Notion",
+    "Drive"
+   ],
+   "tache": "Archive les missions de la semaine"
+  },
+  {
+   "id": "lucie",
+   "pole": "gw",
+   "prenom": "Lucie",
+   "poste": "Directrice éditoriale",
+   "specialite": "Angle, ligne éditoriale et validation finale des posts",
+   "competences": [
+    "Ligne éditoriale",
+    "Choix d'angles",
+    "Validation"
+   ],
+   "outils": [
+    "Notion",
+    "LinkedIn"
+   ],
+   "tache": "Choisit l'angle de la semaine pour un client"
+  },
+  {
+   "id": "yanis",
+   "pole": "gw",
+   "prenom": "Yanis",
+   "poste": "Intervieweur client",
+   "specialite": "Interview de 15 minutes pour capter la voix et les histoires du client",
+   "competences": [
+    "Interview",
+    "Collecte d'anecdotes",
+    "Brief"
+   ],
+   "outils": [
+    "Claude",
+    "Notion",
+    "Zoom"
+   ],
+   "tache": "Prépare les questions de l'interview"
+  },
+  {
+   "id": "ines",
+   "pole": "gw",
+   "prenom": "Inès",
+   "poste": "Rédactrice de posts",
+   "specialite": "Accroches et rédaction de posts texte",
+   "competences": [
+    "Accroches",
+    "Rédaction courte",
+    "Rythme de lecture"
+   ],
+   "outils": [
+    "Claude",
+    "LinkedIn"
+   ],
+   "tache": "Écrit trois accroches pour un post"
+  },
+  {
+   "id": "maxime",
+   "pole": "gw",
+   "prenom": "Maxime",
+   "poste": "Storytelling et carrousels",
+   "specialite": "Récits en carrousel et posts à histoire",
+   "competences": [
+    "Storytelling",
+    "Structure de carrousel",
+    "Slides lisibles"
+   ],
+   "outils": [
+    "Canva",
+    "Claude",
+    "Figma"
+   ],
+   "tache": "Découpe un carrousel en 8 slides"
+  },
+  {
+   "id": "jade",
+   "pole": "gw",
+   "prenom": "Jade",
+   "poste": "Relectrice et voix de marque",
+   "specialite": "Contrôle du ton, des fautes et du style propre au client",
+   "competences": [
+    "Relecture",
+    "Ton de voix",
+    "Orthographe"
+   ],
+   "outils": [
+    "Claude",
+    "Docs"
+   ],
+   "tache": "Compare un brouillon à la voix du client"
+  },
+  {
+   "id": "hugo",
+   "pole": "gw",
+   "prenom": "Hugo",
+   "poste": "Prospection et ciblage",
+   "specialite": "Définit la niche et liste les prospects à contacter",
+   "competences": [
+    "Ciblage de niche",
+    "Listes de prospects",
+    "Qualification"
+   ],
+   "outils": [
+    "LinkedIn",
+    "Sheets",
+    "Calendly"
+   ],
+   "tache": "Trie 40 profils de fondateurs"
+  },
+  {
+   "id": "paul",
+   "pole": "gw",
+   "prenom": "Paul",
+   "poste": "Offres et messages de vente",
+   "specialite": "Messages d'approche, offres et prix",
+   "competences": [
+    "Messages d'approche",
+    "Offre et prix",
+    "Relances"
+   ],
+   "outils": [
+    "Claude",
+    "Gmail",
+    "Calendly"
+   ],
+   "tache": "Rédige un message d'approche en trois lignes"
+  },
+  {
+   "id": "sarah",
+   "pole": "gw",
+   "prenom": "Sarah",
+   "poste": "Analyste LinkedIn",
+   "specialite": "Mesure des vues, des commentaires et des demandes entrantes",
+   "competences": [
+    "Statistiques de posts",
+    "Tests d'accroche",
+    "Rapport client"
+   ],
+   "outils": [
+    "LinkedIn",
+    "Sheets"
+   ],
+   "tache": "Compare les vues des cinq derniers posts"
+  },
+  {
+   "id": "camille",
+   "pole": "pf",
+   "prenom": "Camille",
+   "poste": "Product owner",
+   "specialite": "Priorités produit et périmètre des démarches",
+   "competences": [
+    "Backlog",
+    "Priorisation",
+    "Parcours utilisateur"
+   ],
+   "outils": [
+    "Notion",
+    "Trello"
+   ],
+   "tache": "Classe les démarches à couvrir en premier"
+  },
+  {
+   "id": "lea",
+   "pole": "pf",
+   "prenom": "Léa",
+   "poste": "Juriste administrative",
+   "specialite": "Vérifie les règles belges : communes, mutuelle, emploi, impôts",
+   "competences": [
+    "Procédures belges",
+    "Sources officielles",
+    "Délais légaux"
+   ],
+   "outils": [
+    "Notion",
+    "Firecrawl"
+   ],
+   "tache": "Vérifie une procédure sur le site officiel"
+  },
+  {
+   "id": "noe",
+   "pole": "pf",
+   "prenom": "Noé",
+   "poste": "Veille réglementaire belge",
+   "specialite": "Suit les changements de règles, de délais et de formulaires officiels",
+   "competences": [
+    "Veille officielle",
+    "Changements de règle",
+    "Alertes"
+   ],
+   "outils": [
+    "Firecrawl",
+    "Parallel"
+   ],
+   "tache": "Relève les changements de formulaires"
+  },
+  {
+   "id": "adam",
+   "pole": "pf",
+   "prenom": "Adam",
+   "poste": "Développeur full-stack",
+   "specialite": "Pages, API et base de données de l'application",
+   "competences": [
+    "Next.js",
+    "Base de données",
+    "API"
+   ],
+   "outils": [
+    "Vercel",
+    "Supabase",
+    "GitHub"
+   ],
+   "tache": "Branche le formulaire à la base de données"
+  },
+  {
+   "id": "zoe",
+   "pole": "pf",
+   "prenom": "Zoé",
+   "poste": "Ingénieure de prompts",
+   "specialite": "Écrit et teste les instructions de l'assistant IA",
+   "competences": [
+    "Prompts système",
+    "Jeux de tests",
+    "Réponses sourcées"
+   ],
+   "outils": [
+    "Claude",
+    "Python"
+   ],
+   "tache": "Teste 20 questions sur l'assistant"
+  },
+  {
+   "id": "karim",
+   "pole": "pf",
+   "prenom": "Karim",
+   "poste": "Rédacteur de guides",
+   "specialite": "Guides pas à pas pour être trouvé sur Google",
+   "competences": [
+    "Mots-clés",
+    "Guides pas à pas",
+    "Titres et balises"
+   ],
+   "outils": [
+    "Claude",
+    "Docs"
+   ],
+   "tache": "Rédige le guide « changer d'adresse »"
+  },
+  {
+   "id": "mia",
+   "pole": "pf",
+   "prenom": "Mia",
+   "poste": "Support utilisateurs",
+   "specialite": "Répond aux questions et classe les retours",
+   "competences": [
+    "Réponses types",
+    "Tri des retours",
+    "Ton rassurant"
+   ],
+   "outils": [
+    "Gmail",
+    "WhatsApp"
+   ],
+   "tache": "Classe les messages reçus cette semaine"
+  },
+  {
+   "id": "eliot",
+   "pole": "pf",
+   "prenom": "Eliot",
+   "poste": "QA et tests",
+   "specialite": "Tests des parcours, bugs et vérification avant mise en ligne",
+   "competences": [
+    "Tests de parcours",
+    "Rapports de bugs",
+    "Recette"
+   ],
+   "outils": [
+    "Vercel",
+    "GitHub"
+   ],
+   "tache": "Rejoue le parcours d'inscription"
+  },
+  {
+   "id": "victor",
+   "pole": "tr",
+   "prenom": "Victor",
+   "poste": "Responsable stratégie",
+   "specialite": "Règles d'entrée et de sortie, choix des marchés",
+   "competences": [
+    "Règles de stratégie",
+    "Choix des paires",
+    "Plan de test"
+   ],
+   "outils": [
+    "MT5",
+    "Notion"
+   ],
+   "tache": "Écrit les règles d'entrée d'une stratégie"
+  },
+  {
+   "id": "axel",
+   "pole": "tr",
+   "prenom": "Axel",
+   "poste": "Développeur MQL5",
+   "specialite": "Code des Expert Advisors pour MetaTrader 5",
+   "competences": [
+    "MQL5",
+    "Gestion des ordres",
+    "Débogage"
+   ],
+   "outils": [
+    "MT5",
+    "GitHub"
+   ],
+   "tache": "Corrige la gestion du stop loss"
+  },
+  {
+   "id": "sofia",
+   "pole": "tr",
+   "prenom": "Sofia",
+   "poste": "Analyste backtests",
+   "specialite": "Tests sur historique et lecture des statistiques, coûts compris",
+   "competences": [
+    "Backtest",
+    "Drawdown",
+    "Optimisation prudente"
+   ],
+   "outils": [
+    "MT5",
+    "Python"
+   ],
+   "tache": "Lance un backtest sur deux ans"
+  },
+  {
+   "id": "tess",
+   "pole": "tr",
+   "prenom": "Tess",
+   "poste": "Analyste de preuve",
+   "specialite": "Exige un test hors échantillon et un test à blanc avant de croire un signal",
+   "competences": [
+    "Hors échantillon",
+    "Tests statistiques",
+    "Refus des faux signaux"
+   ],
+   "outils": [
+    "Python",
+    "Sheets"
+   ],
+   "tache": "Vérifie si un signal survit aux coûts"
+  },
+  {
+   "id": "remi",
+   "pole": "tr",
+   "prenom": "Rémi",
+   "poste": "Gestion du risque",
+   "specialite": "Taille de position, perte maximale et règles d'arrêt",
+   "competences": [
+    "Taille de lot",
+    "Perte maximale",
+    "Règles d'arrêt"
+   ],
+   "outils": [
+    "Sheets",
+    "MT5"
+   ],
+   "tache": "Fixe la perte maximale par jour"
+  },
+  {
+   "id": "nils",
+   "pole": "tr",
+   "prenom": "Nils",
+   "poste": "Analyste marchés",
+   "specialite": "Calendrier économique et contexte des actualités",
+   "competences": [
+    "Calendrier économique",
+    "Actualités",
+    "Volatilité"
+   ],
+   "outils": [
+    "Claude",
+    "Sheets",
+    "Firecrawl"
+   ],
+   "tache": "Liste les annonces de la semaine"
+  },
+  {
+   "id": "lola",
+   "pole": "tr",
+   "prenom": "Lola",
+   "poste": "Journal et suivi des robots",
+   "specialite": "Journal de trades et alertes de bon fonctionnement",
+   "competences": [
+    "Journal de trades",
+    "Alertes",
+    "Rapports"
+   ],
+   "outils": [
+    "Sheets",
+    "Telegram"
+   ],
+   "tache": "Compte les trades de la semaine"
+  },
+  {
+   "id": "marc",
+   "pole": "lg",
+   "prenom": "Marc",
+   "poste": "Responsable tournée",
+   "specialite": "Vue d'ensemble de la tournée de journaux",
+   "competences": [
+    "Organisation",
+    "Priorités du jour",
+    "Coordination"
+   ],
+   "outils": [
+    "Sheets",
+    "Maps",
+    "WhatsApp"
+   ],
+   "tache": "Contrôle la liste des arrêts du jour"
+  },
+  {
+   "id": "anais",
+   "pole": "lg",
+   "prenom": "Anaïs",
+   "poste": "Optimisation d'itinéraire",
+   "specialite": "Ordre des arrêts pour réduire les kilomètres",
+   "competences": [
+    "Calcul d'itinéraire",
+    "Plus de 50 arrêts",
+    "Contraintes d'horaires"
+   ],
+   "outils": [
+    "Maps",
+    "Python"
+   ],
+   "tache": "Recalcule l'ordre de 52 arrêts"
+  },
+  {
+   "id": "bastien",
+   "pole": "lg",
+   "prenom": "Bastien",
+   "poste": "Suivi des communes et adresses",
+   "specialite": "Adresses par commune, accès et points délicats",
+   "competences": [
+    "Carnet d'adresses",
+    "Sens uniques",
+    "Remarques de terrain"
+   ],
+   "outils": [
+    "Sheets",
+    "Maps",
+    "Drive"
+   ],
+   "tache": "Met à jour les notes de Morlanwelz-Mariemont"
+  },
+  {
+   "id": "chloe",
+   "pole": "lg",
+   "prenom": "Chloé",
+   "poste": "Planning et horaires",
+   "specialite": "Heures de départ, pauses et délais de livraison",
+   "competences": [
+    "Horaires",
+    "Pauses",
+    "Marge d'imprévus"
+   ],
+   "outils": [
+    "Sheets",
+    "Notion"
+   ],
+   "tache": "Cale l'heure de départ du matin"
+  },
+  {
+   "id": "dylan",
+   "pole": "lg",
+   "prenom": "Dylan",
+   "poste": "Coûts et carburant",
+   "specialite": "Kilomètres, consommation et coût par tournée",
+   "competences": [
+    "Consommation",
+    "Coût au kilomètre",
+    "Suivi mensuel"
+   ],
+   "outils": [
+    "Sheets",
+    "Python"
+   ],
+   "tache": "Calcule le coût de la semaine"
+  },
+  {
+   "id": "eloise",
+   "pole": "gr",
+   "prenom": "Éloïse",
+   "poste": "Cheffe growth",
+   "specialite": "Choix des canaux et plan d'acquisition",
+   "competences": [
+    "Canaux d'acquisition",
+    "Tests rapides",
+    "Objectifs"
+   ],
+   "outils": [
+    "Notion",
+    "Sheets",
+    "PostHog"
+   ],
+   "tache": "Choisit le canal à tester ce mois-ci"
+  },
+  {
+   "id": "tom",
+   "pole": "gr",
+   "prenom": "Tom",
+   "poste": "Spécialiste SEO",
+   "specialite": "Articles et pages qui remontent sur Google",
+   "competences": [
+    "Mots-clés",
+    "Maillage de pages",
+    "Métadonnées"
+   ],
+   "outils": [
+    "Claude",
+    "Sheets",
+    "Firecrawl"
+   ],
+   "tache": "Cherche trois mots-clés peu concurrentiels"
+  },
+  {
+   "id": "rania",
+   "pole": "gr",
+   "prenom": "Rania",
+   "poste": "Community manager",
+   "specialite": "TikTok, LinkedIn et réponses aux commentaires",
+   "competences": [
+    "Scripts vidéo",
+    "Calendrier de posts",
+    "Commentaires"
+   ],
+   "outils": [
+    "Canva",
+    "LinkedIn",
+    "TikTok",
+    "Figma"
+   ],
+   "tache": "Écrit le script d'une vidéo de 30 secondes"
+  },
+  {
+   "id": "ben",
+   "pole": "gr",
+   "prenom": "Ben",
+   "poste": "Automatisations",
+   "specialite": "Scénarios automatiques entre les outils",
+   "competences": [
+    "Scénarios n8n",
+    "Webhooks",
+    "Alertes"
+   ],
+   "outils": [
+    "n8n",
+    "Zapier",
+    "Make",
+    "Slack"
+   ],
+   "tache": "Relie un formulaire à une feuille Sheets"
+  },
+  {
+   "id": "sacha",
+   "pole": "ts",
+   "prenom": "Sacha",
+   "poste": "Responsable TikTok Shop",
+   "specialite": "Choix de la niche et validation du lot de vidéos",
+   "competences": [
+    "Choix de niche",
+    "Sélection de produits",
+    "Validation du lot"
+   ],
+   "outils": [
+    "TikTok",
+    "Sheets",
+    "Drive"
+   ],
+   "tache": "Valide les 5 produits de la nuit"
+  },
+  {
+   "id": "lina",
+   "pole": "ts",
+   "prenom": "Lina",
+   "poste": "Chasseuse de produits",
+   "specialite": "Repère les meilleures ventes et les commissions",
+   "competences": [
+    "Meilleures ventes",
+    "Commissions",
+    "Tendances"
+   ],
+   "outils": [
+    "TikTok",
+    "Sheets",
+    "Firecrawl"
+   ],
+   "tache": "Classe les produits par ventes de la semaine"
+  },
+  {
+   "id": "oscar",
+   "pole": "ts",
+   "prenom": "Oscar",
+   "poste": "Stratège d'angles",
+   "specialite": "Trouve les angles de vente de chaque produit",
+   "competences": [
+    "Angles de vente",
+    "Objections",
+    "Public visé"
+   ],
+   "outils": [
+    "Claude",
+    "Notion"
+   ],
+   "tache": "Liste trois angles pour un produit"
+  },
+  {
+   "id": "emma",
+   "pole": "ts",
+   "prenom": "Emma",
+   "poste": "Rédactrice de hooks",
+   "specialite": "Accroches des trois premières secondes",
+   "competences": [
+    "Accroches",
+    "Tests de variantes",
+    "Rythme"
+   ],
+   "outils": [
+    "Claude",
+    "TikTok"
+   ],
+   "tache": "Écrit cinq accroches pour une vidéo"
+  },
+  {
+   "id": "malik",
+   "pole": "ts",
+   "prenom": "Malik",
+   "poste": "Scénariste vidéo",
+   "specialite": "Scripts plan par plan de 15 à 30 secondes",
+   "competences": [
+    "Script court",
+    "Découpage en plans",
+    "Voix off"
+   ],
+   "outils": [
+    "Claude",
+    "Docs"
+   ],
+   "tache": "Découpe un script en six plans"
+  },
+  {
+   "id": "iris",
+   "pole": "ts",
+   "prenom": "Iris",
+   "poste": "Productrice vidéo",
+   "specialite": "Consignes d'images et de vidéos, puis montage",
+   "competences": [
+    "Prompts d'image",
+    "Prompts vidéo",
+    "Montage"
+   ],
+   "outils": [
+    "HeyGen",
+    "Canva",
+    "Drive"
+   ],
+   "tache": "Prépare les consignes visuelles d'une vidéo"
+  },
+  {
+   "id": "lena",
+   "pole": "ts",
+   "prenom": "Léna",
+   "poste": "Conformité et suivi des ventes",
+   "specialite": "Mentions d'affiliation, contenu généré par IA, règles de la plateforme",
+   "competences": [
+    "Affiliation",
+    "Mentions IA",
+    "Règles TikTok"
+   ],
+   "outils": [
+    "TikTok",
+    "Docs"
+   ],
+   "tache": "Contrôle les mentions d'un lot de vidéos"
+  },
+  {
+   "id": "jules",
+   "pole": "ts",
+   "prenom": "Jules",
+   "poste": "Fiches de publication",
+   "specialite": "Description, hashtags, lien produit et rangement dans Drive",
+   "competences": [
+    "Descriptions",
+    "Hashtags",
+    "Liens produits"
+   ],
+   "outils": [
+    "Drive",
+    "Sheets",
+    "TikTok"
+   ],
+   "tache": "Range les fiches du lot dans Drive"
+  },
+  {
+   "id": "olivier",
+   "pole": "fa",
+   "prenom": "Olivier",
+   "poste": "Responsable facturation",
+   "specialite": "Devis, factures et suivi des paiements",
+   "competences": [
+    "Devis",
+    "Factures",
+    "Relances de paiement"
+   ],
+   "outils": [
+    "Stripe",
+    "Sheets",
+    "PayPal"
+   ],
+   "tache": "Prépare la facture d'un client"
+  },
+  {
+   "id": "margaux",
+   "pole": "fa",
+   "prenom": "Margaux",
+   "poste": "Juriste et RGPD",
+   "specialite": "Mentions légales, conditions et protection des données",
+   "competences": [
+    "RGPD",
+    "Conditions d'utilisation",
+    "Contrats clients"
+   ],
+   "outils": [
+    "Notion",
+    "Claude",
+    "Docs"
+   ],
+   "tache": "Relit les mentions légales du site"
+  }
+ ]
+}

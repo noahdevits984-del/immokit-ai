@@ -1,0 +1,12 @@
+[
+  {
+    "pole": "ts",
+    "nom": "Préparation du lot de vidéos d'affiliation (angles, accroches, scripts, fiches de publication)",
+    "horaire": "Chaque nuit"
+  },
+  {
+    "pole": "dir",
+    "nom": "Lecture des feuilles du QG par ce site (lecture seule, espace privé)",
+    "horaire": "Toutes les 60 secondes, quand la page /direct est ouverte"
+  }
+]
